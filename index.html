@@ -1,14 +1,14 @@
 <!doctype html>
-<html lang="id">
+<html lang="id" data-theme="light">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
-  <meta name="theme-color" content="#f7f5fb">
+  <meta name="theme-color" content="#7164E8">
   <title>Hootch Owner Console</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -22,7 +22,7 @@
       </div>
       <p class="eyebrow">KHUSUS OWNER</p>
       <h1>Masuk ke kendali Hootch</h1>
-      <p class="lede">Pantau pengguna, outlet, dan status langganan aplikasi.</p>
+      <p class="lede">Pantau pengguna, langganan, pendapatan, dan kesehatan platform dari satu tempat.</p>
       <form id="loginForm" novalidate>
         <label for="emailInput">Email owner</label>
         <input id="emailInput" type="email" autocomplete="email" placeholder="owner@email.com" required>
@@ -31,80 +31,117 @@
         <button id="loginButton" class="btn btn-primary" type="submit">Masuk</button>
         <p id="loginError" class="form-error" role="alert"></p>
       </form>
-      <p class="auth-note">Hanya akun yang terdaftar di <code>app_admins</code> yang bisa masuk.</p>
+      <p class="auth-note">Hanya akun aktif di <code>app_admins</code> yang bisa mengakses panel ini.</p>
     </section>
   </main>
 
-  <section id="dashboardView" class="dashboard hidden">
-    <header class="topbar">
-      <div class="brand-lockup">
+  <section id="appView" class="app-shell hidden">
+    <div id="sidebarBackdrop" class="sidebar-backdrop hidden"></div>
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-brand">
         <div class="brand-mark">H</div>
         <div><strong>Hootch</strong><span>Owner Console</span></div>
       </div>
-      <div class="topbar-actions">
-        <span id="adminEmail" class="admin-email"></span>
-        <button id="refreshButton" class="btn btn-ghost" type="button">Muat ulang</button>
-        <button id="logoutButton" class="btn btn-dark" type="button">Keluar</button>
+      <nav id="nav" class="nav" aria-label="Navigasi utama">
+        <div class="nav-group">
+          <p class="nav-label">Overview</p>
+          <button class="nav-item" data-route="dashboard"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></button>
+        </div>
+        <div class="nav-group">
+          <p class="nav-label">Management</p>
+          <button class="nav-item" data-route="users"><i data-lucide="users"></i><span>Pengguna</span></button>
+          <button class="nav-item" data-route="admins"><i data-lucide="shield-check"></i><span>Admin</span></button>
+          <button class="nav-item" data-route="subscriptions"><i data-lucide="credit-card"></i><span>Langganan</span></button>
+          <button class="nav-item" data-route="transactions"><i data-lucide="receipt-text"></i><span>Transaksi</span></button>
+          <button class="nav-item" data-route="plans"><i data-lucide="package"></i><span>Paket</span></button>
+        </div>
+        <div class="nav-group">
+          <p class="nav-label">Platform</p>
+          <button class="nav-item" data-route="features"><i data-lucide="toggle-right"></i><span>Aplikasi & Fitur</span></button>
+          <button class="nav-item" data-route="integrations"><i data-lucide="plug"></i><span>API & Integrasi</span></button>
+          <button class="nav-item" data-route="monitoring"><i data-lucide="activity"></i><span>Monitoring</span></button>
+        </div>
+        <div class="nav-group">
+          <p class="nav-label">Communication</p>
+          <button class="nav-item" data-route="notifications"><i data-lucide="bell"></i><span>Notifikasi</span></button>
+          <button class="nav-item" data-route="announcements"><i data-lucide="megaphone"></i><span>Pengumuman</span></button>
+          <button class="nav-item" data-route="support"><i data-lucide="life-buoy"></i><span>Support</span></button>
+        </div>
+        <div class="nav-group">
+          <p class="nav-label">Insights</p>
+          <button class="nav-item" data-route="analytics"><i data-lucide="chart-no-axes-combined"></i><span>Analitik</span></button>
+          <button class="nav-item" data-route="audit"><i data-lucide="scroll-text"></i><span>Audit Log</span></button>
+        </div>
+        <div class="nav-group">
+          <p class="nav-label">Settings</p>
+          <button class="nav-item" data-route="settings"><i data-lucide="settings"></i><span>Pengaturan</span></button>
+        </div>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="workspace-card">
+          <span class="workspace-dot"></span>
+          <div><strong id="workspaceName">Hootch Workspace</strong><span>Production</span></div>
+        </div>
+        <button id="logoutButton" class="btn btn-sidebar" type="button"><i data-lucide="log-out"></i><span>Keluar</span></button>
       </div>
-    </header>
+    </aside>
 
-    <main class="content">
-      <section class="hero">
-        <div>
-          <p class="eyebrow">RINGKASAN</p>
-          <h1>Kendali Hootch</h1>
-          <p class="lede">Lihat siapa yang memakai aplikasi dan bagaimana outlet mereka berkembang.</p>
-        </div>
-        <p id="lastUpdated" class="last-updated"></p>
-      </section>
-
-      <section id="statsGrid" class="stats-grid" aria-label="Statistik aplikasi"></section>
-
-      <section class="panel">
-        <div class="panel-head">
-          <div>
-            <h2>Pengguna aplikasi</h2>
-            <p id="userCount" class="muted"></p>
+    <div class="app-main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="sidebarToggle" class="icon-button menu-button" type="button" aria-label="Buka navigasi"><i data-lucide="menu"></i></button>
+          <div class="topbar-search">
+            <i data-lucide="search"></i>
+            <input id="globalSearch" type="search" placeholder="Cari pengguna, outlet, transaksi..." autocomplete="off" aria-label="Pencarian global">
+            <kbd>Enter</kbd>
           </div>
-          <label class="search">
-            <span class="sr-only">Cari pengguna</span>
-            <input id="searchInput" type="search" placeholder="Cari email atau outlet..." autocomplete="off">
-          </label>
         </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Pengguna</th>
-                <th>Outlet</th>
-                <th>Langganan</th>
-                <th>Aktivitas</th>
-                <th><span class="sr-only">Aksi</span></th>
-              </tr>
-            </thead>
-            <tbody id="usersBody"></tbody>
-          </table>
+        <div class="topbar-actions">
+          <button id="quickActionButton" class="btn btn-primary btn-quick" type="button"><i data-lucide="plus"></i><span>Aksi Cepat</span></button>
+          <button id="themeToggle" class="icon-button" type="button" aria-label="Ganti tema"><i data-lucide="moon"></i></button>
+          <button id="notifButton" class="icon-button has-dot" type="button" aria-label="Notifikasi"><i data-lucide="bell"></i><span id="notifBadge" class="notif-badge hidden"></span></button>
+          <button id="settingsButton" class="icon-button" type="button" aria-label="Pengaturan"><i data-lucide="settings"></i></button>
+          <button id="profileButton" class="profile-button" type="button" aria-label="Profil owner">
+            <span id="profileAvatar" class="avatar avatar-sm">H</span>
+            <span class="profile-copy"><strong id="profileName">Owner</strong><span id="profileRole">owner</span></span>
+            <i data-lucide="chevron-down"></i>
+          </button>
         </div>
-        <div id="emptyState" class="empty hidden">Tidak ada pengguna yang cocok.</div>
-        <div id="loadingState" class="empty hidden">Memuat data...</div>
-      </section>
-    </main>
+      </header>
+
+      <main id="page" class="page" aria-live="polite"></main>
+    </div>
   </section>
 
-  <div id="detailOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
-    <div class="modal">
-      <div class="modal-head">
-        <div>
-          <p class="eyebrow">DETAIL PENGGUNA</p>
-          <h2 id="detailTitle"></h2>
-        </div>
-        <button id="closeDetail" class="icon-button" type="button" aria-label="Tutup detail">&times;</button>
-      </div>
-      <div id="detailBody" class="modal-body"></div>
+  <div id="quickMenu" class="popover quick-menu hidden" role="menu">
+    <button data-quick="payment"><i data-lucide="badge-dollar-sign"></i><span>Catat pembayaran</span></button>
+    <button data-quick="admin"><i data-lucide="user-plus"></i><span>Tambah admin</span></button>
+    <button data-quick="announcement"><i data-lucide="megaphone"></i><span>Buat pengumuman</span></button>
+    <button data-quick="support"><i data-lucide="life-buoy"></i><span>Buka support</span></button>
+  </div>
+
+  <aside id="notifPanel" class="notif-panel hidden" aria-label="Pusat notifikasi">
+    <div class="notif-head">
+      <div><p class="eyebrow">NOTIFIKASI</p><h2>Pusat aktivitas</h2></div>
+      <button id="closeNotif" class="icon-button" type="button" aria-label="Tutup notifikasi"><i data-lucide="x"></i></button>
     </div>
+    <div id="notifList" class="notif-list"></div>
+    <div class="notif-foot"><button id="markAllRead" class="btn btn-ghost" type="button">Tandai semua dibaca</button></div>
+  </aside>
+
+  <div id="drawerOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+    <section class="drawer">
+      <div class="drawer-head">
+        <div><p class="eyebrow" id="drawerEyebrow">DETAIL</p><h2 id="drawerTitle"></h2></div>
+        <button id="closeDrawer" class="icon-button" type="button" aria-label="Tutup panel"><i data-lucide="x"></i></button>
+      </div>
+      <div id="drawerBody" class="drawer-body"></div>
+    </section>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
