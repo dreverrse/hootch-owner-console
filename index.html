@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#f7f5fb">
+  <title>Hootch Owner Console</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <main id="loginView" class="auth-shell">
+    <section class="auth-card">
+      <div class="brand-lockup">
+        <div class="brand-mark">H</div>
+        <div><strong>Hootch</strong><span>Owner Console</span></div>
+      </div>
+      <p class="eyebrow">KHUSUS OWNER</p>
+      <h1>Masuk ke kendali Hootch</h1>
+      <p class="lede">Pantau pengguna, outlet, dan status langganan aplikasi.</p>
+      <form id="loginForm" novalidate>
+        <label for="emailInput">Email owner</label>
+        <input id="emailInput" type="email" autocomplete="email" placeholder="owner@email.com" required>
+        <label for="passwordInput">Password</label>
+        <input id="passwordInput" type="password" autocomplete="current-password" placeholder="Password akun Supabase" required>
+        <button id="loginButton" class="btn btn-primary" type="submit">Masuk</button>
+        <p id="loginError" class="form-error" role="alert"></p>
+      </form>
+      <p class="auth-note">Hanya akun yang terdaftar di <code>app_admins</code> yang bisa masuk.</p>
+    </section>
+  </main>
+
+  <section id="dashboardView" class="dashboard hidden">
+    <header class="topbar">
+      <div class="brand-lockup">
+        <div class="brand-mark">H</div>
+        <div><strong>Hootch</strong><span>Owner Console</span></div>
+      </div>
+      <div class="topbar-actions">
+        <span id="adminEmail" class="admin-email"></span>
+        <button id="refreshButton" class="btn btn-ghost" type="button">Muat ulang</button>
+        <button id="logoutButton" class="btn btn-dark" type="button">Keluar</button>
+      </div>
+    </header>
+
+    <main class="content">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">RINGKASAN</p>
+          <h1>Kendali Hootch</h1>
+          <p class="lede">Lihat siapa yang memakai aplikasi dan bagaimana outlet mereka berkembang.</p>
+        </div>
+        <p id="lastUpdated" class="last-updated"></p>
+      </section>
+
+      <section id="statsGrid" class="stats-grid" aria-label="Statistik aplikasi"></section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>Pengguna aplikasi</h2>
+            <p id="userCount" class="muted"></p>
+          </div>
+          <label class="search">
+            <span class="sr-only">Cari pengguna</span>
+            <input id="searchInput" type="search" placeholder="Cari email atau outlet..." autocomplete="off">
+          </label>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Pengguna</th>
+                <th>Outlet</th>
+                <th>Langganan</th>
+                <th>Aktivitas</th>
+                <th><span class="sr-only">Aksi</span></th>
+              </tr>
+            </thead>
+            <tbody id="usersBody"></tbody>
+          </table>
+        </div>
+        <div id="emptyState" class="empty hidden">Tidak ada pengguna yang cocok.</div>
+        <div id="loadingState" class="empty hidden">Memuat data...</div>
+      </section>
+    </main>
+  </section>
+
+  <div id="detailOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">DETAIL PENGGUNA</p>
+          <h2 id="detailTitle"></h2>
+        </div>
+        <button id="closeDetail" class="icon-button" type="button" aria-label="Tutup detail">&times;</button>
+      </div>
+      <div id="detailBody" class="modal-body"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js"></script>
+</body>
+</html>
